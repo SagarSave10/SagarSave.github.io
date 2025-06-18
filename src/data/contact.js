@@ -14,36 +14,18 @@ const data = [
     label: 'Github',
     icon: faGithub,
   },
-  {
-    link: 'https://facebook.com/d',
-    label: 'Facebook',
-    icon: faFacebookF,
-  },
+
   {
     link: 'https://www.instagram.com/dangelosaurus/',
     label: 'Instagram',
     icon: faInstagram,
   },
   {
-    link: 'https://www.linkedin.com/in/michaelldangelo',
+    link: 'https://www.linkedin.com/in/sagar-save1',
     label: 'LinkedIn',
     icon: faLinkedinIn,
   },
-  {
-    link: 'https://angel.co/michael-d-angelo',
-    label: 'Angel List',
-    icon: faAngellist,
-  },
-  {
-    link: 'https://twitter.com/dangelosaurus',
-    label: 'Twitter',
-    icon: faTwitter,
-  },
-  {
-    link: 'mailto:michael.l.dangelo@gmail.com',
-    label: 'Email',
-    icon: faEnvelope,
-  },
+
 ];
 
 export default data;

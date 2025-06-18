@@ -5,10 +5,7 @@ import Main from '../layouts/Main';
 
 const Index = () => (
   <Main
-    description={
-      "Michael D'Angelo's personal website. New York based Stanford ICME graduate, "
-      + 'VP of Engineering at Smile Identity, co-founder of Arthena and Matroid, and YC Alumni.'
-    }
+    description="I am a graduate student in Mechanical Engineering at the University of Michigan with a strong background in smart manufacturing systems, semiconductor packaging, integrated microsystems, thermal and fluid analysis, design optimization, and design for manufacturability. With over three years of industry experience at Royal Enfield, I have led more than 20 strategic cost optimization and value engineering projects. My expertise spans design research, project management, vendor coordination, supply chain management, and operations within the automotive sector. Currently, I am involved in the design and development of traction inverters for electric vehicles, working toward power and efficiency targets set by the U.S. Department of Energy for 2030."
   >
     <article className="post" id="index">
       <header>
@@ -17,21 +14,21 @@ const Index = () => (
             <Link to="/">About this site</Link>
           </h2>
           <p>
-            A beautiful, responsive, statically-generated, react application
-            written with modern Javascript.
+            A personal portfolio site showcasing my work in smart manufacturing
+            systems, semiconductor packaging, electric vehicle technologies, and
+            design for manufacturability — built using modern React and JavaScript
+            frameworks.
           </p>
         </div>
       </header>
       <p>
-        {' '}
         Welcome to my website. Please feel free to read more{' '}
         <Link to="/about">about me</Link>, or you can check out my{' '}
-        <Link to="/resume">resume</Link>, <Link to="/projects">projects</Link>,{' '}
-        view <Link to="/stats">site statistics</Link>, or{' '}
+        <Link to="/resume">resume</Link>, <Link to="/projects">projects</Link>, view{' '}
+        <Link to="/stats">certifications & achievements</Link>, or{' '}
         <Link to="/contact">contact</Link> me.
       </p>
       <p>
-        {' '}
         Source available{' '}
         <a href="https://github.com/mldangelo/personal-site">here</a>.
       </p>

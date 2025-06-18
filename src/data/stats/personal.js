@@ -1,39 +1,32 @@
-import React, { useState, useEffect } from 'react';
-
-const Age = () => {
-  const [age, setAge] = useState();
-
-  const tick = () => {
-    const divisor = 1000 * 60 * 60 * 24 * 365.2421897; // ms in an average year
-    const birthTime = new Date('1990-02-05T09:24:00');
-    setAge(((Date.now() - birthTime) / divisor).toFixed(11));
-  };
-
-  useEffect(() => {
-    const timer = setInterval(() => tick(), 25);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-  return <>{age}</>;
-};
-
 const data = [
   {
-    key: 'age',
-    label: 'Current age',
-    value: <Age />,
+    label: 'Semiconductor Packaging',
+    value: 'Arizona State University',
+    link: 'https://www.coursera.org/learn/semiconductor-packaging', // Replace with actual cert link if available
   },
   {
-    key: 'countries',
-    label: 'Countries visited',
-    value: 53,
-    link: 'https://www.google.com/maps/d/embed?mid=1iBBTscqateQ93pWFVfHCUZXoDu8&z=2',
+    label: '3D Printing Technology (Ultimaker 3 Extended)',
+    value: 'Mechanical Engineering Department, DBIT',
   },
   {
-    key: 'location',
-    label: 'Current city',
-    value: 'New York, NY',
+    label: 'Intro to Mechanical Design and Manufacturing with Fusion 360',
+    value: 'Autodesk',
+    link: 'https://academy.autodesk.com/course/146786/introduction-mechanical-engineering-design-and-manufacturing-fusion-360',
+  },
+  {
+    label: 'Programming for Everyone & Python Data Structures',
+    value: 'University of Michigan',
+    link: 'https://www.coursera.org/specializations/python', // optional, replace if you have certificate ID
+  },
+  {
+    label: 'Writing Skills for Engineering Leaders',
+    value: 'Rice University',
+    link: 'https://www.coursera.org/learn/writing-skills-engineering-leaders',
+  },
+  {
+    label: 'Digital Transformations of Manufacturing Technologies',
+    value: 'University of Michigan',
+    link: 'https://online.umich.edu/courses/digital-transformation-of-manufacturing/', // optional link
   },
 ];
 
