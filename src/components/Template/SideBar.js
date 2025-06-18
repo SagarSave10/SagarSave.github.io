@@ -22,7 +22,7 @@ const SideBar = () => (
     <section className="blurb">
       <h2>About</h2>
       <p>
-        Hi, I&apos;m Sagar. I am a Graduate Student in University of Michigan's{' '}
+        Hi I am Sagar, I am a Graduate Student in University of Michigan{' '}
         <a href="https://me.engin.umich.edu//"> Mechanical Engineering department </a>, Former {' '}
         <a href="https://www.royalenfield.com/us/en/home/">Promptfoo</a> Royal Enfiled Employee, and
         was VP of Engineering at <a href="https://mu.ac.in/">University of Mumbai</a>,
