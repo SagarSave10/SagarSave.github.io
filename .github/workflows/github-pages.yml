@@ -28,7 +28,7 @@ jobs:
       name: github-pages
       url: https://sagarsave10.github.io
     runs-on: ubuntu-22.04
-    timeout-minutes: 30
+    timeout-minutes: 200
     steps:
       - name: Checkout
         uses: actions/checkout@v4
