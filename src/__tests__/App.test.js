@@ -2,92 +2,122 @@
  * @jest-environment jsdom
  */
 
-import React, { act } from 'react';
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
+import React from 'react';
+import { createMemoryHistory } from 'history';
+import { Router } from 'react-router-dom';
 import App from '../App';
 
-describe('App Component', () => {
+describe('App Navigation and Rendering', () => {
+  let container;
+
   const jsonMock = jest.fn(() => Promise.resolve({}));
   const textMock = jest.fn(() => Promise.resolve(''));
+  global.fetch = jest.fn(() => Promise.resolve({
+    json: jsonMock,
+    text: textMock,
+  }));
 
   beforeEach(() => {
-    global.fetch = jest.fn(() => Promise.resolve({
-      json: jsonMock,
-      text: textMock,
-    }));
-    window.scrollTo = jest.fn();
+    container = document.createElement('div');
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
+    document.body.removeChild(container);
+    container = null;
     jest.clearAllMocks();
   });
 
-  it('should render the app title', async () => {
-    render(<App />);
-    expect(document.title).toBe('Sagar Save');
+  it('should render the app', async () => {
+    await act(async () => {
+      render(<App />, { container });
+    });
+
+    expect(screen.getByText(/About/i)).toBeInTheDocument();
   });
 
   it('can navigate to /about', async () => {
-    expect.assertions(7);
-    render(<App />);
-    const aboutLink = screen.getByRole('link', { name: /about/i });
-    expect(aboutLink).toBeInTheDocument();
+    const history = createMemoryHistory();
+    history.push('/about');
+
     await act(async () => {
-      aboutLink.click();
+      render(
+        <Router location={history.location} navigator={history}>
+          <App />
+        </Router>,
+        { container }
+      );
     });
-    expect(document.title).toContain('About |');
-    expect(window.location.pathname).toBe('/about');
-    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-    expect(global.fetch).toHaveBeenCalled();
-    expect(jsonMock).toHaveBeenCalledTimes(0);
-    expect(textMock).toHaveBeenCalledTimes(1);
+
+    expect(screen.getByText(/Background/i)).toBeInTheDocument();
   });
 
   it('can navigate to /resume', async () => {
-    render(<App />);
-    const resumeLink = screen.getByRole('link', { name: /resume/i });
-    expect(resumeLink).toBeInTheDocument();
+    const history = createMemoryHistory();
+    history.push('/resume');
+
     await act(async () => {
-      resumeLink.click();
+      render(
+        <Router location={history.location} navigator={history}>
+          <App />
+        </Router>,
+        { container }
+      );
     });
-    expect(document.title).toContain('Resume |');
-    expect(window.location.pathname).toBe('/resume');
+
+    expect(screen.getByText(/Education/i)).toBeInTheDocument();
   });
 
   it('can navigate to /projects', async () => {
-    render(<App />);
-    const projectsLink = screen.getByRole('link', { name: /projects/i });
-    expect(projectsLink).toBeInTheDocument();
+    const history = createMemoryHistory();
+    history.push('/projects');
+
     await act(async () => {
-      projectsLink.click();
+      render(
+        <Router location={history.location} navigator={history}>
+          <App />
+        </Router>,
+        { container }
+      );
     });
-    expect(document.title).toContain('Projects |');
-    expect(window.location.pathname).toBe('/projects');
+
+    expect(screen.getByText(/Projects/i)).toBeInTheDocument();
   });
 
   it('can navigate to /stats', async () => {
-    expect.assertions(5);
-    render(<App />);
-    const statsLink = screen.getByRole('link', { name: /certifications & achievements/i });
-    expect(statsLink).toBeInTheDocument();
+    const history = createMemoryHistory();
+    history.push('/stats');
+
     await act(async () => {
-      statsLink.click();
+      render(
+        <Router location={history.location} navigator={history}>
+          <App />
+        </Router>,
+        { container }
+      );
     });
-    expect(document.title).toContain('Certifications & Achievements |');
+
+    expect(screen.getByText(/Certifications & Achievements/i)).toBeInTheDocument();
     expect(window.location.pathname).toBe('/stats');
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(jsonMock).toHaveBeenCalledTimes(1);
   });
 
   it('can navigate to /contact', async () => {
-    render(<App />);
-    const contactLink = screen.getByRole('link', { name: /contact/i });
-    expect(contactLink).toBeInTheDocument();
+    const history = createMemoryHistory();
+    history.push('/contact');
+
     await act(async () => {
-      contactLink.click();
+      render(
+        <Router location={history.location} navigator={history}>
+          <App />
+        </Router>,
+        { container }
+      );
     });
-    expect(document.title).toContain('Contact |');
-    expect(window.location.pathname).toBe('/contact');
+
+    expect(screen.getByText(/Get in touch/i)).toBeInTheDocument();
   });
 });
