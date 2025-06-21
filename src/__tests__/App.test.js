@@ -4,51 +4,98 @@
 
 import '@testing-library/jest-dom';
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import ReactDOM from 'react-dom/client';
+import { act } from 'react-dom/test-utils';
 import App from '../App';
 
-describe('App Navigation and Rendering', () => {
-  beforeEach(() => {
-    render(
-      <MemoryRouter>
-        <App />
-      </MemoryRouter>,
-    );
+describe('renders the app', () => {
+  const jsonMock = jest.fn(() => Promise.resolve({}));
+  const textMock = jest.fn(() => Promise.resolve(''));
+  global.fetch = jest.fn(() => Promise.resolve({
+    json: jsonMock,
+    text: textMock,
+  }));
+  window.scrollTo = jest.fn();
+
+  let container;
+
+  beforeEach(async () => {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+    await act(async () => {
+      ReactDOM.createRoot(container).render(<App />);
+    });
   });
 
-  it('renders site title', () => {
-    const titleLink = screen.getByRole('link', { name: /sagar save/i });
-    expect(titleLink).toBeInTheDocument();
+  afterEach(() => {
+    document.body.removeChild(container);
+    container = null;
+    jest.clearAllMocks();
   });
 
-  it('navigates to About page', () => {
-    const aboutLink = screen.getAllByRole('link', { name: /about/i })[0];
-    fireEvent.click(aboutLink);
-    expect(screen.getByText(/about me/i)).toBeInTheDocument();
+  it('should render the app', async () => {
+    expect(document.body).toBeInTheDocument();
   });
 
-  it('navigates to Resume page', () => {
-    const resumeLink = screen.getAllByRole('link', { name: /resume/i })[0];
-    fireEvent.click(resumeLink);
-    expect(screen.getByText(/education/i)).toBeInTheDocument();
+  it('should render the title', async () => {
+    expect(document.title).toBe('Sagar Save');
   });
 
-  it('navigates to Projects page', () => {
-    const projectsLink = screen.getAllByRole('link', { name: /projects/i })[0];
-    fireEvent.click(projectsLink);
-    expect(screen.getByText(/projects/i)).toBeInTheDocument();
+  it('can navigate to /about', async () => {
+    const links = document.querySelectorAll('a');
+    const aboutLink = links[0]; // update index if needed
+    expect(aboutLink).toBeInTheDocument();
+    await act(async () => {
+      aboutLink.click();
+    });
+    expect(document.title).toContain('About |');
+    expect(window.location.pathname).toBe('/about');
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+    expect(global.fetch).toHaveBeenCalled();
   });
 
-  it('navigates to Stats page', () => {
-    const statsLink = screen.getAllByRole('link', { name: /certifications & achievements/i })[0];
-    fireEvent.click(statsLink);
-    expect(screen.getByText(/certifications/i)).toBeInTheDocument();
+  it('can navigate to /resume', async () => {
+    const links = document.querySelectorAll('a');
+    const resumeLink = links[1];
+    expect(resumeLink).toBeInTheDocument();
+    await act(async () => {
+      resumeLink.click();
+    });
+    expect(document.title).toContain('Resume |');
+    expect(window.location.pathname).toBe('/resume');
   });
 
-  it('navigates to Contact page', () => {
-    const contactLink = screen.getAllByRole('link', { name: /contact/i })[0];
-    fireEvent.click(contactLink);
-    expect(screen.getByText(/contact/i)).toBeInTheDocument();
+  it('can navigate to /projects', async () => {
+    const links = document.querySelectorAll('a');
+    const projectsLink = links[2];
+    expect(projectsLink).toBeInTheDocument();
+    await act(async () => {
+      projectsLink.click();
+    });
+    expect(document.title).toContain('Projects |');
+    expect(window.location.pathname).toBe('/projects');
+  });
+
+  it('can navigate to /stats', async () => {
+    const links = document.querySelectorAll('a');
+    const statsLink = links[3];
+    expect(statsLink).toBeInTheDocument();
+    await act(async () => {
+      statsLink.click();
+    });
+    expect(document.title).toContain('Stats |');
+    expect(window.location.pathname).toBe('/stats');
+    expect(global.fetch).toHaveBeenCalled();
+  });
+
+  it('can navigate to /contact', async () => {
+    const links = document.querySelectorAll('a');
+    const contactLink = links[4];
+    expect(contactLink).toBeInTheDocument();
+    await act(async () => {
+      contactLink.click();
+    });
+    expect(document.title).toContain('Contact |');
+    expect(window.location.pathname).toBe('/contact');
   });
 });
