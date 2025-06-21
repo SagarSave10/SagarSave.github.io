@@ -40,9 +40,7 @@ describe('renders the app and navigates between pages', () => {
       aboutLink.click();
     });
 
-    await waitFor(() =>
-      expect(document.title).toContain('About |')
-    );
+    await waitFor(() => expect(document.title).toContain('About |'));
     expect(window.location.pathname).toBe('/about');
   });
 
@@ -54,9 +52,7 @@ describe('renders the app and navigates between pages', () => {
       resumeLink.click();
     });
 
-    await waitFor(() =>
-      expect(document.title).toContain('Resume |')
-    );
+    await waitFor(() => expect(document.title).toContain('Resume |'));
     expect(window.location.pathname).toBe('/resume');
   });
 
@@ -68,9 +64,7 @@ describe('renders the app and navigates between pages', () => {
       projectsLink.click();
     });
 
-    await waitFor(() =>
-      expect(document.title).toContain('Projects |')
-    );
+    await waitFor(() => expect(document.title).toContain('Projects |'));
     expect(window.location.pathname).toBe('/projects');
   });
 
@@ -82,9 +76,7 @@ describe('renders the app and navigates between pages', () => {
       statsLink.click();
     });
 
-    await waitFor(() =>
-      expect(document.title).toContain('Stats |')
-    );
+    await waitFor(() => expect(document.title).toContain('Stats |'));
     expect(window.location.pathname).toBe('/stats');
     expect(global.fetch).toHaveBeenCalled();
   });
@@ -97,9 +89,7 @@ describe('renders the app and navigates between pages', () => {
       contactLink.click();
     });
 
-    await waitFor(() =>
-      expect(document.title).toContain('Contact |')
-    );
+    await waitFor(() => expect(document.title).toContain('Contact |'));
     expect(window.location.pathname).toBe('/contact');
   });
 });
