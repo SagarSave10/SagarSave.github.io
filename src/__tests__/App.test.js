@@ -13,7 +13,7 @@ describe('App Navigation and Rendering', () => {
     render(
       <MemoryRouter>
         <App />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
   });
 
