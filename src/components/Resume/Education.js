@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Education = ({ data = [] }) => (
+const Education = ({ data }) => (
   <div className="education">
     <div className="link-to" id="education" />
     <div className="title">
@@ -44,6 +44,10 @@ Education.propTypes = {
       year: PropTypes.number.isRequired,
     }),
   ),
+};
+
+Education.defaultProps = {
+  data: [],
 };
 
 export default Education;

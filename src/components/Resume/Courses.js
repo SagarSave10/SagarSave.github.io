@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Course = ({ data, last }) => {
-  const { title, number, link, university } = data;
+  const {
+    title, number, link, university,
+  } = data;
 
   return (
     <li className="course">

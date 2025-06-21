@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-// Validates the first half of an email address.
+// Validates the first half of an email address
 const validateText = (text) => {
-  // RFC 5322 compliant (but not Google's standard)
-  const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))$/;
+  const re = /^(([^<>().,;:\s@"]+(\.[^<>().,;:\s@"]+)*)|(".+"))$/;
   return re.test(text) || text.length === 0;
 };
 
@@ -38,11 +37,11 @@ const useInterval = (callback, delay) => {
       const id = setInterval(() => savedCallback.current(), delay);
       return () => clearInterval(id);
     }
-    return () => {};
+    return undefined;
   }, [delay]);
 };
 
-const EmailLink = ({ loopMessage = false }) => {
+const EmailLink = ({ loopMessage }) => {
   const hold = 50;
   const delay = 50;
 
@@ -89,6 +88,10 @@ const EmailLink = ({ loopMessage = false }) => {
 
 EmailLink.propTypes = {
   loopMessage: PropTypes.bool,
+};
+
+EmailLink.defaultProps = {
+  loopMessage: false,
 };
 
 export default EmailLink;
