@@ -3,69 +3,52 @@
  */
 
 import '@testing-library/jest-dom';
-import '@testing-library/react';
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import App from '../App';
 
-describe('App Component', () => {
-  it('renders the app title', async () => {
-    await act(async () => {
-      render(<App />);
-    });
-
-    const title = screen.getByRole('link', { name: /sagar save/i });
-    expect(title).toBeInTheDocument();
+describe('App Navigation and Rendering', () => {
+  beforeEach(() => {
+    render(
+      <MemoryRouter>
+        <App />
+      </MemoryRouter>
+    );
   });
 
-  it('navigates to /about', async () => {
-    await act(async () => {
-      render(<App />);
-    });
-
-    const aboutLinks = screen.getAllByRole('link', { name: /about/i });
-    fireEvent.click(aboutLinks[0]); // Click first matching "About"
-    expect(window.location.pathname).toMatch(/about/i);
+  it('renders site title', () => {
+    const titleLink = screen.getByRole('link', { name: /sagar save/i });
+    expect(titleLink).toBeInTheDocument();
   });
 
-  it('navigates to /resume', async () => {
-    await act(async () => {
-      render(<App />);
-    });
-
-    const resumeLinks = screen.getAllByRole('link', { name: /resume/i });
-    fireEvent.click(resumeLinks[0]);
-    expect(window.location.pathname).toMatch(/resume/i);
+  it('navigates to About page', () => {
+    const aboutLink = screen.getAllByRole('link', { name: /about/i })[0];
+    fireEvent.click(aboutLink);
+    expect(screen.getByText(/about me/i)).toBeInTheDocument();
   });
 
-  it('navigates to /projects', async () => {
-    await act(async () => {
-      render(<App />);
-    });
-
-    const projectLinks = screen.getAllByRole('link', { name: /projects/i });
-    fireEvent.click(projectLinks[0]);
-    expect(window.location.pathname).toMatch(/projects/i);
+  it('navigates to Resume page', () => {
+    const resumeLink = screen.getAllByRole('link', { name: /resume/i })[0];
+    fireEvent.click(resumeLink);
+    expect(screen.getByText(/education/i)).toBeInTheDocument();
   });
 
-  it('navigates to /stats', async () => {
-    await act(async () => {
-      render(<App />);
-    });
-
-    const statsLinks = screen.getAllByRole('link', { name: /certifications & achievements/i });
-    fireEvent.click(statsLinks[0]);
-    expect(window.location.pathname).toMatch(/stats/i);
+  it('navigates to Projects page', () => {
+    const projectsLink = screen.getAllByRole('link', { name: /projects/i })[0];
+    fireEvent.click(projectsLink);
+    expect(screen.getByText(/projects/i)).toBeInTheDocument();
   });
 
-  it('navigates to /contact', async () => {
-    await act(async () => {
-      render(<App />);
-    });
+  it('navigates to Stats page', () => {
+    const statsLink = screen.getAllByRole('link', { name: /certifications & achievements/i })[0];
+    fireEvent.click(statsLink);
+    expect(screen.getByText(/certifications/i)).toBeInTheDocument();
+  });
 
-    const contactLinks = screen.getAllByRole('link', { name: /contact/i });
-    fireEvent.click(contactLinks[0]);
-    expect(window.location.pathname).toMatch(/contact/i);
+  it('navigates to Contact page', () => {
+    const contactLink = screen.getAllByRole('link', { name: /contact/i })[0];
+    fireEvent.click(contactLink);
+    expect(screen.getByText(/contact/i)).toBeInTheDocument();
   });
 });
