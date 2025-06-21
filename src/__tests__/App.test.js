@@ -8,17 +8,19 @@ import { act } from 'react-dom/test-utils';
 import { render, screen, waitFor } from '@testing-library/react';
 import App from '../App';
 
-describe('renders the app and navigates between pages', () => {
+describe('App Navigation and Rendering', () => {
+  // Mock global fetch used on stats/about pages
   const jsonMock = jest.fn(() => Promise.resolve({}));
   const textMock = jest.fn(() => Promise.resolve(''));
-
-  beforeAll(() => {
-    global.fetch = jest.fn(() => Promise.resolve({
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
       json: jsonMock,
       text: textMock,
-    }));
-    window.scrollTo = jest.fn();
-  });
+    })
+  );
+
+  // Mock scrollTo
+  window.scrollTo = jest.fn();
 
   beforeEach(() => {
     render(<App />);
@@ -28,15 +30,19 @@ describe('renders the app and navigates between pages', () => {
     jest.clearAllMocks();
   });
 
-  it('should render the app', () => {
+  it('renders the App component', () => {
     expect(document.body).toBeInTheDocument();
   });
 
+  it('renders default title', () => {
+    expect(document.title).toContain('Sagar Save');
+  });
+
   it('navigates to /about', async () => {
-    const aboutLink = screen.getByRole('link', { name: /about/i });
+    const aboutLink = screen.getAllByRole('link', { name: /about/i })[0];
     expect(aboutLink).toBeInTheDocument();
 
-    act(() => {
+    await act(async () => {
       aboutLink.click();
     });
 
@@ -45,10 +51,10 @@ describe('renders the app and navigates between pages', () => {
   });
 
   it('navigates to /resume', async () => {
-    const resumeLink = screen.getByRole('link', { name: /resume/i });
+    const resumeLink = screen.getAllByRole('link', { name: /resume/i })[0];
     expect(resumeLink).toBeInTheDocument();
 
-    act(() => {
+    await act(async () => {
       resumeLink.click();
     });
 
@@ -57,11 +63,11 @@ describe('renders the app and navigates between pages', () => {
   });
 
   it('navigates to /projects', async () => {
-    const projectsLink = screen.getByRole('link', { name: /projects/i });
-    expect(projectsLink).toBeInTheDocument();
+    const projectLink = screen.getAllByRole('link', { name: /projects/i })[0];
+    expect(projectLink).toBeInTheDocument();
 
-    act(() => {
-      projectsLink.click();
+    await act(async () => {
+      projectLink.click();
     });
 
     await waitFor(() => expect(document.title).toContain('Projects |'));
@@ -69,23 +75,23 @@ describe('renders the app and navigates between pages', () => {
   });
 
   it('navigates to /stats', async () => {
-    const statsLink = screen.getByRole('link', { name: /stats/i });
+    const statsLink = screen.getAllByRole('link', { name: /certifications|stats/i })[0];
     expect(statsLink).toBeInTheDocument();
 
-    act(() => {
+    await act(async () => {
       statsLink.click();
     });
 
-    await waitFor(() => expect(document.title).toContain('Stats |'));
-    expect(window.location.pathname).toBe('/stats');
+    await waitFor(() => expect(document.title).toContain('Certifications |'));
     expect(global.fetch).toHaveBeenCalled();
+    expect(window.location.pathname).toBe('/stats');
   });
 
   it('navigates to /contact', async () => {
-    const contactLink = screen.getByRole('link', { name: /contact/i });
+    const contactLink = screen.getAllByRole('link', { name: /contact/i })[0];
     expect(contactLink).toBeInTheDocument();
 
-    act(() => {
+    await act(async () => {
       contactLink.click();
     });
 
