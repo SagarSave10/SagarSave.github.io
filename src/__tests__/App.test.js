@@ -10,11 +10,9 @@ import { MemoryRouter } from 'react-router-dom';
 import AppRoutes from '../AppRoutes';
 
 // Mock fetch for the test environment
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    text: () => Promise.resolve('# Test Content\nThis is test markdown content.'),
-  })
-);
+global.fetch = jest.fn(() => Promise.resolve({
+  text: () => Promise.resolve('# Test Content\nThis is test markdown content.'),
+}));
 
 // Mock the window.location
 delete window.location;
@@ -56,7 +54,7 @@ describe('App Navigation and Rendering', () => {
       createRoot(container).render(
         <MemoryRouter initialEntries={initialEntries}>
           <AppRoutes />
-        </MemoryRouter>
+        </MemoryRouter>,
       );
     });
   };
