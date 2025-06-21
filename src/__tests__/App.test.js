@@ -84,4 +84,25 @@ describe('renders the app', () => {
 
   it('can navigate to /stats', async () => {
     expect.assertions(5);
-    const link = document.querySelector('#header > nav > ul > li:nth-child(4) >
+    const link = document.querySelector('#header > nav > ul > li:nth-child(4) > a');
+    expect(link).toBeInTheDocument();
+    await act(async () => {
+      link.click();
+    });
+    expect(document.title).toContain('Certifications & Achievements |'); // UPDATED
+    expect(window.location.pathname).toBe('/stats');
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(jsonMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('can navigate to /contact', async () => {
+    expect.assertions(3);
+    const link = document.querySelector('#header > nav > ul > li:nth-child(5) > a');
+    expect(link).toBeInTheDocument();
+    await act(async () => {
+      link.click();
+    });
+    expect(document.title).toContain('Contact |');
+    expect(window.location.pathname).toBe('/contact');
+  });
+});
