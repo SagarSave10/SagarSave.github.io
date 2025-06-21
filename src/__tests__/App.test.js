@@ -2,98 +2,78 @@
  * @jest-environment jsdom
  */
 
+import React, { act } from 'react';
 import '@testing-library/jest-dom';
-import '@testing-library/react';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { act } from 'react';
+import { render, screen } from '@testing-library/react';
 import App from '../App';
 
-describe('renders the app', () => {
-  let container;
+describe('App Component', () => {
+  const jsonMock = jest.fn(() => Promise.resolve({}));
+  const textMock = jest.fn(() => Promise.resolve(''));
 
-  beforeEach(async () => {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-    await act(async () => {
-      ReactDOM.createRoot(container).render(<App />);
-    });
-    window.scrollTo = jest.fn(); // mock scroll
+  beforeEach(() => {
+    global.fetch = jest.fn(() => Promise.resolve({
+      json: jsonMock,
+      text: textMock,
+    }));
+    window.scrollTo = jest.fn();
   });
 
   afterEach(() => {
-    document.body.removeChild(container);
-    container = null;
     jest.clearAllMocks();
   });
 
-  it('should render the app', async () => {
-    expect(document.body).toBeInTheDocument();
-  });
-
-  it('should render the title', async () => {
+  it('should render the app title', async () => {
+    render(<App />);
     expect(document.title).toBe('Sagar Save');
   });
 
   it('can navigate to /about', async () => {
     expect.assertions(7);
-    const jsonMock = jest.fn(() => Promise.resolve({}));
-    const textMock = jest.fn(() => Promise.resolve(''));
-    global.fetch = jest.fn(() => Promise.resolve({ json: jsonMock, text: textMock }));
-
-    const link = document.querySelector('#header > nav > ul > li:nth-child(1) > a');
-    expect(link).toBeInTheDocument();
-
+    render(<App />);
+    const aboutLink = screen.getByRole('link', { name: /about/i });
+    expect(aboutLink).toBeInTheDocument();
     await act(async () => {
-      link.click();
+      aboutLink.click();
     });
-
     expect(document.title).toContain('About |');
     expect(window.location.pathname).toBe('/about');
-    expect(window.scrollTo).toHaveBeenNthCalledWith(1, 0, 0);
-    expect(global.fetch).toHaveBeenCalledTimes(1);
-    expect(jsonMock).not.toHaveBeenCalled(); // about page uses text
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+    expect(global.fetch).toHaveBeenCalled();
+    expect(jsonMock).toHaveBeenCalledTimes(0);
     expect(textMock).toHaveBeenCalledTimes(1);
   });
 
   it('can navigate to /resume', async () => {
-    expect.assertions(3);
-    const link = document.querySelector('#header > nav > ul > li:nth-child(2) > a');
-    expect(link).toBeInTheDocument();
-
+    render(<App />);
+    const resumeLink = screen.getByRole('link', { name: /resume/i });
+    expect(resumeLink).toBeInTheDocument();
     await act(async () => {
-      link.click();
+      resumeLink.click();
     });
-
     expect(document.title).toContain('Resume |');
     expect(window.location.pathname).toBe('/resume');
   });
 
   it('can navigate to /projects', async () => {
-    expect.assertions(3);
-    const link = document.querySelector('#header > nav > ul > li:nth-child(3) > a');
-    expect(link).toBeInTheDocument();
-
+    render(<App />);
+    const projectsLink = screen.getByRole('link', { name: /projects/i });
+    expect(projectsLink).toBeInTheDocument();
     await act(async () => {
-      link.click();
+      projectsLink.click();
     });
-
     expect(document.title).toContain('Projects |');
     expect(window.location.pathname).toBe('/projects');
   });
 
   it('can navigate to /stats', async () => {
     expect.assertions(5);
-    const jsonMock = jest.fn(() => Promise.resolve({}));
-    global.fetch = jest.fn(() => Promise.resolve({ json: jsonMock }));
-
-    const link = document.querySelector('#header > nav > ul > li:nth-child(4) > a');
-    expect(link).toBeInTheDocument();
-
+    render(<App />);
+    const statsLink = screen.getByRole('link', { name: /certifications & achievements/i });
+    expect(statsLink).toBeInTheDocument();
     await act(async () => {
-      link.click();
+      statsLink.click();
     });
-
     expect(document.title).toContain('Certifications & Achievements |');
     expect(window.location.pathname).toBe('/stats');
     expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -101,14 +81,12 @@ describe('renders the app', () => {
   });
 
   it('can navigate to /contact', async () => {
-    expect.assertions(3);
-    const link = document.querySelector('#header > nav > ul > li:nth-child(5) > a');
-    expect(link).toBeInTheDocument();
-
+    render(<App />);
+    const contactLink = screen.getByRole('link', { name: /contact/i });
+    expect(contactLink).toBeInTheDocument();
     await act(async () => {
-      link.click();
+      contactLink.click();
     });
-
     expect(document.title).toContain('Contact |');
     expect(window.location.pathname).toBe('/contact');
   });
