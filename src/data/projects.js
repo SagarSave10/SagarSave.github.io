@@ -22,7 +22,7 @@ const data = [
     subtitle: 'Consulting project with Centrepolis Accelerators.',
     link: 'https://drive.google.com/file/d/17BFl6ujLWJzfu0zlI_UwXPNjm2YdpxPv/view?usp=sharing',
     image: '/images/projects/Centrepolis.jpg',
-    date: '2015-06-28',
+    date: '2024-12-10',
     desc:
       'This project focused on strengthening U.S. supply chains in battery manufacturing, semiconductors, electric motors, and casting/forging. The team developed data-driven roadmaps and an interactive Power BI dashboard profiling 180+ companies, with insights on financials, investors, and geographic distribution. Key deliverables included supplier profiling, transportation footprint mapping, and identification of bottlenecks. The project resulted in 30+ high-potential investment opportunities and a comprehensive technology-policy report for OEMs, startups, and coalitions, enabling informed decision-making and regional development. ',
   },

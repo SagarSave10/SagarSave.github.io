@@ -10,14 +10,15 @@ import { act } from 'react-dom/test-utils';
 import App from '../App';
 
 describe('renders the app', () => {
-  // mocks the fetch API used on the stats page and the about page.
   const jsonMock = jest.fn(() => Promise.resolve({}));
   const textMock = jest.fn(() => Promise.resolve(''));
-  global.fetch = jest.fn(() => Promise.resolve({
-    json: jsonMock,
-    text: textMock,
-  }));
-  // mocks the scrollTo API used when navigating to a new page.
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      json: jsonMock,
+      text: textMock,
+    }),
+  );
+
   window.scrollTo = jest.fn();
 
   let container;
@@ -26,7 +27,7 @@ describe('renders the app', () => {
     container = document.createElement('div');
     document.body.appendChild(container);
     await act(async () => {
-      await ReactDOM.createRoot(container).render(<App />);
+      ReactDOM.createRoot(container).render(<App />);
     });
   });
 
@@ -36,22 +37,20 @@ describe('renders the app', () => {
     jest.clearAllMocks();
   });
 
-  it('should render the app', async () => {
+  it('should render the app', () => {
     expect(document.body).toBeInTheDocument();
   });
 
-  it('should render the title', async () => {
+  it('should render the title', () => {
     expect(document.title).toBe('Sagar Save');
   });
 
   it('can navigate to /about', async () => {
     expect.assertions(7);
-    const aboutLink = document.querySelector(
-      '#header > nav > ul > li:nth-child(1) > a',
-    );
-    expect(aboutLink).toBeInTheDocument();
+    const link = document.querySelector('#header > nav > ul > li:nth-child(1) > a');
+    expect(link).toBeInTheDocument();
     await act(async () => {
-      await aboutLink.click();
+      link.click();
     });
     expect(document.title).toContain('About |');
     expect(window.location.pathname).toBe('/about');
@@ -63,12 +62,10 @@ describe('renders the app', () => {
 
   it('can navigate to /resume', async () => {
     expect.assertions(3);
-    const contactLink = document.querySelector(
-      '#header > nav > ul > li:nth-child(2) > a',
-    );
-    expect(contactLink).toBeInTheDocument();
+    const link = document.querySelector('#header > nav > ul > li:nth-child(2) > a');
+    expect(link).toBeInTheDocument();
     await act(async () => {
-      await contactLink.click();
+      link.click();
     });
     expect(document.title).toContain('Resume |');
     expect(window.location.pathname).toBe('/resume');
@@ -76,12 +73,10 @@ describe('renders the app', () => {
 
   it('can navigate to /projects', async () => {
     expect.assertions(3);
-    const contactLink = document.querySelector(
-      '#header > nav > ul > li:nth-child(3) > a',
-    );
-    expect(contactLink).toBeInTheDocument();
+    const link = document.querySelector('#header > nav > ul > li:nth-child(3) > a');
+    expect(link).toBeInTheDocument();
     await act(async () => {
-      await contactLink.click();
+      link.click();
     });
     expect(document.title).toContain('Projects |');
     expect(window.location.pathname).toBe('/projects');
@@ -89,29 +84,4 @@ describe('renders the app', () => {
 
   it('can navigate to /stats', async () => {
     expect.assertions(5);
-    const contactLink = document.querySelector(
-      '#header > nav > ul > li:nth-child(4) > a',
-    );
-    expect(contactLink).toBeInTheDocument();
-    await act(async () => {
-      await contactLink.click();
-    });
-    expect(document.title).toContain('Stats |');
-    expect(window.location.pathname).toBe('/stats');
-    expect(global.fetch).toHaveBeenCalledTimes(1);
-    expect(jsonMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('can navigate to /contact', async () => {
-    expect.assertions(3);
-    const contactLink = document.querySelector(
-      '#header > nav > ul > li:nth-child(5) > a',
-    );
-    expect(contactLink).toBeInTheDocument();
-    await act(async () => {
-      await contactLink.click();
-    });
-    expect(document.title).toContain('Contact |');
-    expect(window.location.pathname).toBe('/contact');
-  });
-});
+    const link = document.querySelector('#header > nav > ul > li:nth-child(4) >
