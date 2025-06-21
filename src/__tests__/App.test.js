@@ -2,9 +2,9 @@
  * @jest-environment jsdom
  */
 
-import React, { act } from 'react';
+import React from 'react';
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import App from '../App';
 
 describe('App Component', () => {
@@ -17,6 +17,8 @@ describe('App Component', () => {
       text: textMock,
     }));
     window.scrollTo = jest.fn();
+    // Optionally reset document.location if needed
+    window.history.pushState({}, '', '/');
   });
 
   afterEach(() => {
@@ -24,13 +26,17 @@ describe('App Component', () => {
   });
 
   it('should render the app title', async () => {
-    render(<App />);
+    await act(async () => {
+      render(<App />);
+    });
     expect(document.title).toBe('Sagar Save');
   });
 
   it('can navigate to /about', async () => {
     expect.assertions(7);
-    render(<App />);
+    await act(async () => {
+      render(<App />);
+    });
     const aboutLink = screen.getByRole('link', { name: /about/i });
     expect(aboutLink).toBeInTheDocument();
     await act(async () => {
@@ -45,7 +51,9 @@ describe('App Component', () => {
   });
 
   it('can navigate to /resume', async () => {
-    render(<App />);
+    await act(async () => {
+      render(<App />);
+    });
     const resumeLink = screen.getByRole('link', { name: /resume/i });
     expect(resumeLink).toBeInTheDocument();
     await act(async () => {
@@ -56,7 +64,9 @@ describe('App Component', () => {
   });
 
   it('can navigate to /projects', async () => {
-    render(<App />);
+    await act(async () => {
+      render(<App />);
+    });
     const projectsLink = screen.getByRole('link', { name: /projects/i });
     expect(projectsLink).toBeInTheDocument();
     await act(async () => {
@@ -68,7 +78,9 @@ describe('App Component', () => {
 
   it('can navigate to /stats', async () => {
     expect.assertions(5);
-    render(<App />);
+    await act(async () => {
+      render(<App />);
+    });
     const statsLink = screen.getByRole('link', { name: /certifications & achievements/i });
     expect(statsLink).toBeInTheDocument();
     await act(async () => {
@@ -81,7 +93,9 @@ describe('App Component', () => {
   });
 
   it('can navigate to /contact', async () => {
-    render(<App />);
+    await act(async () => {
+      render(<App />);
+    });
     const contactLink = screen.getByRole('link', { name: /contact/i });
     expect(contactLink).toBeInTheDocument();
     await act(async () => {
