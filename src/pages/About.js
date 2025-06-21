@@ -1,3 +1,6 @@
+useEffect(() => {
+  document.title = 'Contact | Sagar Save'; // or 'About | Sagar Save', etc.
+}, []);
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Markdown from 'markdown-to-jsx';
