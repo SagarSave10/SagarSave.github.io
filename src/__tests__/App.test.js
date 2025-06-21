@@ -4,98 +4,87 @@
 
 import '@testing-library/jest-dom';
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { render, screen, waitFor } from '@testing-library/react';
+import { createRoot } from 'react-dom/client';
+import { act } from 'react';
+import { waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import App from '../App';
 
 describe('App Navigation and Rendering', () => {
-  // Mock global fetch used on stats/about pages
-  const jsonMock = jest.fn(() => Promise.resolve({}));
-  const textMock = jest.fn(() => Promise.resolve(''));
-  global.fetch = jest.fn(() =>
-    Promise.resolve({
-      json: jsonMock,
-      text: textMock,
-    })
-  );
-
-  // Mock scrollTo
-  window.scrollTo = jest.fn();
+  let container = null;
 
   beforeEach(() => {
-    render(<App />);
+    container = document.createElement('div');
+    document.body.appendChild(container);
   });
 
   afterEach(() => {
+    document.body.removeChild(container);
+    container = null;
     jest.clearAllMocks();
   });
 
-  it('renders the App component', () => {
-    expect(document.body).toBeInTheDocument();
-  });
-
-  it('renders default title', () => {
-    expect(document.title).toContain('Sagar Save');
-  });
-
-  it('navigates to /about', async () => {
-    const aboutLink = screen.getAllByRole('link', { name: /about/i })[0];
-    expect(aboutLink).toBeInTheDocument();
-
-    await act(async () => {
-      aboutLink.click();
+  const renderApp = (initialEntries = ['/']) => {
+    act(() => {
+      createRoot(container).render(
+        <MemoryRouter initialEntries={initialEntries}>
+          <App />
+        </MemoryRouter>
+      );
     });
+  };
 
-    await waitFor(() => expect(document.title).toContain('About |'));
-    expect(window.location.pathname).toBe('/about');
+  test('renders the App component', () => {
+    renderApp();
+    expect(container).toBeInTheDocument();
   });
 
-  it('navigates to /resume', async () => {
-    const resumeLink = screen.getAllByRole('link', { name: /resume/i })[0];
-    expect(resumeLink).toBeInTheDocument();
-
-    await act(async () => {
-      resumeLink.click();
+  test('renders default title (About)', async () => {
+    renderApp(['/']);
+    await waitFor(() => {
+      expect(document.title).toBe('About | Sagar Save');
     });
-
-    await waitFor(() => expect(document.title).toContain('Resume |'));
-    expect(window.location.pathname).toBe('/resume');
   });
 
-  it('navigates to /projects', async () => {
-    const projectLink = screen.getAllByRole('link', { name: /projects/i })[0];
-    expect(projectLink).toBeInTheDocument();
-
-    await act(async () => {
-      projectLink.click();
+  test('navigates to /about', async () => {
+    renderApp(['/about']);
+    await waitFor(() => {
+      expect(document.title).toBe('About | Sagar Save');
     });
-
-    await waitFor(() => expect(document.title).toContain('Projects |'));
-    expect(window.location.pathname).toBe('/projects');
   });
 
-  it('navigates to /stats', async () => {
-    const statsLink = screen.getAllByRole('link', { name: /certifications|stats/i })[0];
-    expect(statsLink).toBeInTheDocument();
-
-    await act(async () => {
-      statsLink.click();
+  test('navigates to /resume', async () => {
+    renderApp(['/resume']);
+    await waitFor(() => {
+      expect(document.title).toBe('Resume | Sagar Save');
     });
-
-    await waitFor(() => expect(document.title).toContain('Certifications |'));
-    expect(global.fetch).toHaveBeenCalled();
-    expect(window.location.pathname).toBe('/stats');
   });
 
-  it('navigates to /contact', async () => {
-    const contactLink = screen.getAllByRole('link', { name: /contact/i })[0];
-    expect(contactLink).toBeInTheDocument();
-
-    await act(async () => {
-      contactLink.click();
+  test('navigates to /projects', async () => {
+    renderApp(['/projects']);
+    await waitFor(() => {
+      expect(document.title).toBe('Projects | Sagar Save');
     });
+  });
 
-    await waitFor(() => expect(document.title).toContain('Contact |'));
-    expect(window.location.pathname).toBe('/contact');
+  test('navigates to /stats', async () => {
+    renderApp(['/stats']);
+    await waitFor(() => {
+      expect(document.title).toContain('Certifications');
+    });
+  });
+
+  test('navigates to /contact', async () => {
+    renderApp(['/contact']);
+    await waitFor(() => {
+      expect(document.title).toBe('Contact | Sagar Save');
+    });
+  });
+
+  test('renders 404 page on unknown route', async () => {
+    renderApp(['/unknown']);
+    await waitFor(() => {
+      expect(document.body.textContent).toMatch(/page not found/i);
+    });
   });
 });

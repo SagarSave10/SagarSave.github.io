@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 
 // Validates the first half of an email address.
 const validateText = (text) => {
-  // NOTE: Passes RFC 5322 but not tested on google's standard.
-  // eslint-disable-next-line no-useless-escape
+  // RFC 5322 compliant (but not Google's standard)
   const re = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))$/;
   return re.test(text) || text.length === 0;
 };
@@ -36,47 +35,42 @@ const useInterval = (callback, delay) => {
 
   useEffect(() => {
     if (delay) {
-      const id = setInterval(() => {
-        savedCallback.current();
-      }, delay);
+      const id = setInterval(() => savedCallback.current(), delay);
       return () => clearInterval(id);
     }
-    return () => {}; // pass linter
+    return () => {};
   }, [delay]);
 };
 
-const EmailLink = ({ loopMessage }) => {
-  const hold = 50; // ticks to wait after message is complete before rendering next message
-  const delay = 50; // tick length in mS
+const EmailLink = ({ loopMessage = false }) => {
+  const hold = 50;
+  const delay = 50;
 
-  const [idx, updateIter] = useState(0); // points to current message
-  const [message, updateMessage] = useState(messages[idx]);
-  const [char, updateChar] = useState(0); // points to current char
-  const [isActive, setIsActive] = useState(true); // disable when all messages are printed
+  const [idx, updateIter] = useState(0);
+  const [message, updateMessage] = useState(messages[0]);
+  const [char, updateChar] = useState(0);
+  const [isActive, setIsActive] = useState(true);
 
-  useInterval(
-    () => {
-      let newIdx = idx;
-      let newChar = char;
-      if (char - hold >= messages[idx].length) {
-        newIdx += 1;
-        newChar = 0;
-      }
-      if (newIdx === messages.length) {
-        if (loopMessage) {
-          updateIter(0);
-          updateChar(0);
-        } else {
-          setIsActive(false);
-        }
+  useInterval(() => {
+    let newIdx = idx;
+    let newChar = char;
+    if (char - hold >= messages[idx].length) {
+      newIdx += 1;
+      newChar = 0;
+    }
+    if (newIdx === messages.length) {
+      if (loopMessage) {
+        updateIter(0);
+        updateChar(0);
       } else {
-        updateMessage(messages[newIdx].slice(0, newChar));
-        updateIter(newIdx);
-        updateChar(newChar + 1);
+        setIsActive(false);
       }
-    },
-    isActive ? delay : null,
-  );
+    } else {
+      updateMessage(messages[newIdx].slice(0, newChar));
+      updateIter(newIdx);
+      updateChar(newChar + 1);
+    }
+  }, isActive ? delay : null);
 
   return (
     <div
@@ -91,10 +85,6 @@ const EmailLink = ({ loopMessage }) => {
       </a>
     </div>
   );
-};
-
-EmailLink.defaultProps = {
-  loopMessage: false,
 };
 
 EmailLink.propTypes = {

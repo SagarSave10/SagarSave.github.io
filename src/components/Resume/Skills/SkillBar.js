@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const SkillBar = ({ data, categories }) => {
+const SkillBar = ({ data, categories = [] }) => {
   const { category, competency, title } = data;
 
-  // TODO: Consider averaging colors
+  // Compute the background color from the first matching category
   const titleStyle = {
     background: categories
       .filter((cat) => category.includes(cat.name))
@@ -37,12 +37,8 @@ SkillBar.propTypes = {
     PropTypes.shape({
       name: PropTypes.string,
       color: PropTypes.string,
-    }),
+    })
   ),
-};
-
-SkillBar.defaultProps = {
-  categories: [],
 };
 
 export default SkillBar;

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import CategoryButton from './Skills/CategoryButton';
 import SkillBar from './Skills/SkillBar';
 
-const Skills = ({ skills, categories }) => {
+const Skills = ({ skills = [], categories = [] }) => {
   const initialButtons = Object.fromEntries(
     [['All', false]].concat(categories.map(({ name }) => [name, false])),
   );
@@ -12,7 +12,6 @@ const Skills = ({ skills, categories }) => {
   const [buttons, setButtons] = useState(initialButtons);
 
   const handleChildClick = (label) => {
-    // Toggle button that was clicked. Turn all other buttons off.
     const newButtons = Object.keys(buttons).reduce(
       (obj, key) => ({
         ...obj,
@@ -20,13 +19,11 @@ const Skills = ({ skills, categories }) => {
       }),
       {},
     );
-    // Turn on 'All' button if other buttons are off
     newButtons.All = !Object.keys(buttons).some((key) => newButtons[key]);
     setButtons(newButtons);
   };
 
   const getRows = () => {
-    // search for true active categories
     const actCat = Object.keys(buttons).reduce(
       (cat, key) => (buttons[key] ? key : cat),
       'All',
@@ -90,11 +87,6 @@ Skills.propTypes = {
       color: PropTypes.string,
     }),
   ),
-};
-
-Skills.defaultProps = {
-  skills: [],
-  categories: [],
 };
 
 export default Skills;

@@ -8,10 +8,10 @@ import SideBar from '../components/Template/SideBar';
 import ScrollToTop from '../components/Template/ScrollToTop';
 
 const Main = ({
-  children,
-  fullPage,
-  title,
-  description,
+  children = null,
+  fullPage = false,
+  title = null,
+  description = "Sagar Save's personal website.",
 }) => (
   <HelmetProvider>
     <Analytics />
@@ -27,7 +27,7 @@ const Main = ({
     <div id="wrapper">
       <Navigation />
       <div id="main">{children}</div>
-      {fullPage ? null : <SideBar />}
+      {!fullPage && <SideBar />}
     </div>
   </HelmetProvider>
 );
@@ -40,13 +40,6 @@ Main.propTypes = {
   fullPage: PropTypes.bool,
   title: PropTypes.string,
   description: PropTypes.string,
-};
-
-Main.defaultProps = {
-  children: null,
-  fullPage: false,
-  title: null,
-  description: "Sagar Save's personal website.",
 };
 
 export default Main;
