@@ -57,8 +57,9 @@ jobs:
           REACT_APP_GA_TRACKING_ID: UA-68649021-1
 
       - name: Upload built content
-        uses: actions/upload-pages-artifact@v1 # Changed from upload-artifact@v4
+        uses: actions/upload-artifact@v4 # Use v4 of upload-artifact
         with:
+          name: github-pages # Name of the artifact to upload
           path: build # Path to your build directory
 
   deploy:
@@ -75,3 +76,5 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
+        with:
+          artifact_name: github-pages # Specify the artifact name to deploy
