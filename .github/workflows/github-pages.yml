@@ -56,6 +56,9 @@ jobs:
           NODE_ENV: production
           REACT_APP_GA_TRACKING_ID: UA-68649021-1
 
+      - name: List build directory contents # ADDED FOR DEBUGGING
+        run: ls -R build
+
       - name: Upload built content
         uses: actions/upload-artifact@v4 # Use v4 of upload-artifact
         with:
