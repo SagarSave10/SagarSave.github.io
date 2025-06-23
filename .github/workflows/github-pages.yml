@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build the site
+      - name: Build the site with retry
         run: |
           function retry {
             local n=1
@@ -56,14 +56,14 @@ jobs:
           NODE_ENV: production
           REACT_APP_GA_TRACKING_ID: UA-68649021-1
 
-      - name: List build directory contents # THIS IS THE ADDED DEBUGGING STEP
+      - name: List build directory contents
         run: ls -R build
 
       - name: Upload built content
-        uses: actions/upload-artifact@v4 # Use v4 of upload-artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: github-pages # Name of the artifact to upload
-          path: build # Path to your build directory
+          name: github-pages
+          path: build
 
   deploy:
     needs: build
@@ -77,7 +77,16 @@ jobs:
       url: https://sagarsave10.github.io
 
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: .
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v3
+
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
         with:
-          artifact_name: github-pages # Specify the artifact name to deploy
+          artifact_name: github-pages
