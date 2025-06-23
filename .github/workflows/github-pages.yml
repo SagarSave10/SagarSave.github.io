@@ -53,7 +53,7 @@ jobs:
                 if [[ $n -lt $max ]]; then
                   ((n++))
                   echo "Command failed. Attempt $n/$max:"
-                  sleep $delay;
+                  sleep $delay
                 else
                   echo "The command has failed after $n attempts."
                   return 1
@@ -65,6 +65,9 @@ jobs:
         env:
           NODE_ENV: production
           REACT_APP_GA_TRACKING_ID: UA-68649021-1
+
+      - name: List build directory contents
+        run: ls -R build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v2
