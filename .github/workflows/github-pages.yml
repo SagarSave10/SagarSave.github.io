@@ -55,6 +55,13 @@ jobs:
           NODE_ENV: production
           REACT_APP_GA_TRACKING_ID: UA-68649021-1
       
+      - name: Debug build output
+        run: |
+          echo "Build directory contents:"
+          ls -la build/
+          echo "index.html exists:"
+          ls -la build/index.html || echo "index.html not found!"
+      
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
