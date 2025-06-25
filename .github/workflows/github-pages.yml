@@ -54,8 +54,8 @@ jobs:
           NODE_ENV: production
           REACT_APP_GA_TRACKING_ID: UA-68649021-1
 
-      - name: Upload build output for GitHub Pages
-        uses: actions/upload-pages-artifact@v1 # NOT deprecated
+      - name: Upload artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v1
         with:
           path: build
 
