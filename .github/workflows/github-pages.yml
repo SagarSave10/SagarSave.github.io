@@ -2,7 +2,7 @@ name: Build and Deploy Static Content to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -35,9 +35,7 @@ jobs:
       - name: Build the site
         run: |
           function retry {
-            local n=1
-            local max=5
-            local delay=2
+            local n=1 max=5 delay=2
             while true; do
               "$@" && break || {
                 if [[ $n -lt $max ]]; then
@@ -56,17 +54,15 @@ jobs:
           NODE_ENV: production
           REACT_APP_GA_TRACKING_ID: UA-68649021-1
 
-      - name: List build directory (debugging)
-        run: ls -R build
-
-      - name: Upload built content for GitHub Pages
-        uses: actions/upload-pages-artifact@v4
+      - name: Upload built content
+        uses: actions/upload-pages-artifact@v1
         with:
           path: build
 
   deploy:
     needs: build
     runs-on: ubuntu-22.04
+
     permissions:
       pages: write
       id-token: write
