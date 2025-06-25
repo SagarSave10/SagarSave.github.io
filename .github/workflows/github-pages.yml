@@ -35,14 +35,20 @@ jobs:
       - name: Build the site
         run: |
           function retry {
-            local n=1 max=5 delay=2
+            local n=1
+            local max=5
+            local delay=2
             while true; do
               "$@" && break || {
-                ((n++)) || true
-                echo "Attempt $n"
-                sleep $delay
+                if [[ $n -lt $max ]]; then
+                  ((n++))
+                  echo "Command failed. Attempt $n/$max:"
+                  sleep $delay;
+                else
+                  echo "The command has failed after $n attempts."
+                  return 1
+                fi
               }
-              ((n>max)) && return 1
             done
           }
           retry npm run predeploy
@@ -50,15 +56,18 @@ jobs:
           NODE_ENV: production
           REACT_APP_GA_TRACKING_ID: UA-68649021-1
 
-      - name: Upload artifact for GitHub Pages
-        uses: actions/upload-pages-artifact@v1
+      - name: List build directory contents # Keep this for now to confirm
+        run: ls -R build
+
+      - name: Upload built content # Reverting to general upload-artifact
+        uses: actions/upload-artifact@v4 # Use v4 of upload-artifact
         with:
-          path: build
+          name: github-pages-artifact # A distinct name for the artifact
+          path: build # Path to your build directory
 
   deploy:
     needs: build
     runs-on: ubuntu-22.04
-
     permissions:
       pages: write
       id-token: write
@@ -68,11 +77,13 @@ jobs:
       url: https://sagarsave10.github.io
 
     steps:
-      - name: Download built artifact
-        uses: actions/download-pages-artifact@v1
-
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v3
+      - name: Download built artifact # Explicitly download the artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages-artifact # Match the name from the build job
+          path: ./
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
+        with:
+          folder: github-pages-artifact # Specify the folder where the artifact was downloaded
