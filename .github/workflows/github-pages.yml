@@ -59,10 +59,9 @@ jobs:
       - name: List build directory contents # Keep this for now to confirm
         run: ls -R build
 
-      - name: Upload built content # Reverting to general upload-artifact
-        uses: actions/upload-artifact@v4 # Use v4 of upload-artifact
+      - name: Upload built content
+        uses: actions/upload-pages-artifact@v1 # This is the correct action for GitHub Pages
         with:
-          name: github-pages-artifact # A distinct name for the artifact
           path: build # Path to your build directory
 
   deploy:
@@ -77,13 +76,5 @@ jobs:
       url: https://sagarsave10.github.io
 
     steps:
-      - name: Download built artifact # Explicitly download the artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: github-pages-artifact # Match the name from the build job
-          path: ./
-
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
-        with:
-          folder: github-pages-artifact # Specify the folder where the artifact was downloaded
+        uses: actions/deploy-pages@v2 # This action automatically picks up the artifact from upload-pages-artifact
