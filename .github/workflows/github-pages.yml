@@ -60,7 +60,7 @@ jobs:
         run: ls -R build
 
       - name: Upload built content # CORRECTED ACTION
-        uses: actions/upload-pages-artifact@v4 # Use the specific Pages artifact upload action
+        uses: actions/upload-pages-artifact@v1 # Use the specific Pages artifact upload action
         with:
           path: build # Path to your build directory
 
